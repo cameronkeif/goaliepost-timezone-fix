@@ -69,7 +69,7 @@
 
   gameTimes.forEach((gameTime) => {
     // Grab the hour and adjust by our calculated offset
-    const innerText = gameTime.innerText;
+    const { innerText } = gameTime;
     const hour = parseInt(innerText.slice(3).split(":")[0]);
     const offset = browserTimezoneOffset - easternTimezoneOffset;
     let convertedHour = hour + offset;
@@ -85,21 +85,20 @@
 
     let convertedTwentyFourHour = twentyFourHour + offset;
 
-    const isDayOverlap = convertedHour > 12 || convertedTwentyFourHour >= 24;
+    const shouldSwapAmPm = convertedHour > 12 || convertedHour < 1 || convertedTwentyFourHour >= 24;
     if (convertedHour > 12) {
       convertedHour = convertedHour - 12;
+    } else if (convertedHour < 1) {
+      convertedHour += 12;
     }
-
     // Update the text
     let updatedText = innerText.replace(`${hour}:`, `${convertedHour}:`);
     updatedText = updatedText.replace(pageTimeZoneText, `(${browserTimezoneAbbreviation})`)
 
-    if (isDayOverlap) {
-      if (innerText.includes("AM")) {
-        updatedText = updatedText.replace("AM", "PM");
-      } else {
-        updatedText = updatedText.replace("PM", "AM")
-      }
+    if (shouldSwapAmPm) {
+      updatedText = innerText.includes("AM")
+        ? updatedText.replace("AM", "PM")
+        : updatedText.replace("PM", "AM");
     }
 
     gameTime.innerText = updatedText;
