@@ -5,7 +5,6 @@
 // @description  Updates the https://www.goaliepost.com website to display times in your local time instead of just eastern time.
 // @author       Cameron Keif
 // @match        *://goaliepost.com
-// @grant        none
 // ==/UserScript==
 
 (function() {
